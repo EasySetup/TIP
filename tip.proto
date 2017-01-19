@@ -1,0 +1,66 @@
+// tip.proto
+//
+// Protocol syntax definition for THe Introduction Protocol (TIP)
+
+//package tip;
+
+message Intro {
+  optional string csi = 1;
+  optional string introData = 2;
+  optional string contextId = 3;
+  optional string altCarrier = 4;
+}
+
+message AuthReq {
+  required string authData = 2;
+  required string encryptedData = 5; // when decrypted contains PrivateAuthReq
+}
+
+message AuthRsp {
+  required string encryptedData = 5; // when decrypted contains PrivateAuthRsp
+}
+
+message Cred {
+  enum CredType {
+    UNKNOWN = 0;
+    CONNECTOR = 1;
+    HOTSPOT2 = 2;
+  }
+  required CredType credType = 1;
+  required string credOctets = 2;
+}
+
+message Credentials {
+  repeated Cred cred = 1;
+}
+
+message NewKey {
+  required string csi = 1;
+  required string keyData = 6;
+  required string proofOfPossession = 7;
+}
+
+message PrivateAuthReq {
+  optional NewKey newKey = 1;
+  optional Credentials credentials = 2;
+}
+
+message PrivateAuthRsp {
+  optional NewKey newKey = 1;
+  optional Credentials credentials = 2;
+}
+
+message Conf {
+  optional string status = 1;
+  optional Credentials credentials = 2;
+}
+
+message TipMessage {
+  // Types of TIP message PDUs
+  optional Intro intro = 1;
+  optional AuthReq authreq = 2;
+  optional AuthRsp authrsp = 3;
+  optional Conf conf = 4;
+}
+
+
