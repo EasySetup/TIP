@@ -1,66 +1,5 @@
 // tip.proto
 //
-// Protocol syntax definition for THe Introduction Protocol (TIP)
+// Protocol syntax definition for The Introduction Protocol (TIP)
 
-//package tip;
-
-message Intro {
-  optional string csi = 1;
-  optional string introData = 2;
-  optional string contextId = 3;
-  optional string altCarrier = 4;
-}
-
-message AuthReq {
-  required string authData = 2;
-  required string encryptedData = 5; // when decrypted contains PrivateAuthReq
-}
-
-message AuthRsp {
-  required string encryptedData = 5; // when decrypted contains PrivateAuthRsp
-}
-
-message Cred {
-  enum CredType {
-    UNKNOWN = 0;
-    CONNECTOR = 1;
-    HOTSPOT2 = 2;
-  }
-  required CredType credType = 1;
-  required string credOctets = 2;
-}
-
-message Credentials {
-  repeated Cred cred = 1;
-}
-
-message NewKey {
-  required string csi = 1;
-  required string keyData = 6;
-  required string proofOfPossession = 7;
-}
-
-message PrivateAuthReq {
-  optional NewKey newKey = 1;
-  optional Credentials credentials = 2;
-}
-
-message PrivateAuthRsp {
-  optional NewKey newKey = 1;
-  optional Credentials credentials = 2;
-}
-
-message Conf {
-  optional string status = 1;
-  optional Credentials credentials = 2;
-}
-
-message TipMessage {
-  // Types of TIP message PDUs
-  optional Intro intro = 1;
-  optional AuthReq authreq = 2;
-  optional AuthRsp authrsp = 3;
-  optional Conf conf = 4;
-}
-
-
+message M0 {                     // optional capability indication  repeated string csid = 1;}message M1 {                    required string csid = 1;  required string keyData = 2;}message M2 {  required string scid = 1;  required string keyData = 2;  required string wrappedData = 5; // when decrypted contains privateData}message M3 {  required string scid = 1;  required string wrappedData = 5; // when decrypted contains privateData}message M4 {  required string scid = 1;  required string wrappedData = 5; // when decrypted contains privateData}message Wpa2Credential {  required string ssid = 1;  required string wpa2Passphrase = 2;  optional string macAddress = 3;}message Wpa2PersonalList {  repeated Wpa2Credential wpa2Credential = 1;}message DeviceDescription {   // loosely based on UPnP - Basic:1.0 Device Definition Version 1.0  // urn:schemas-upnp-org:device:Basic:1   optional string friendlyName = 1  // short user-friendly title UTF-8                                    // default to disambiguate  optional string manufacturer = 2  // manufacturer name UTF-8   optional string modelDescription = 3  // long user-friendly title  optional string modelName = 4     // model name  optional string modelNumber = 5   // model number  optional string serialNumber = 6  // manufacturer's serial number}message NewKey {  required string csid = 1;  required string keyData = 2;  required string proof = 7; // opaque octet string}message NewKeyList {  repeated NewKey newKey = 1;}message Credential {  enum CredentialType {    UNKNOWN = 0;    CONNECTOR = 1; // from DPP    HOTSPOT2 = 2;    X.509 = 3;  }  required CredentialType credentialType = 1;  required string credentialOctets = 2;}message CredentialList {  repeated Credential credential = 1;}message Wpa2Credential {  required string ssid = 1;  required string wpaPassphrase = 2;  optional string macAddress =3;}message ConfigData {  optional Wpa2Credential wpa2Credential = 1;}message privateData {  optional DeviceDescription deviceDescription = 1;  optional NewKeyList newKeyList = 2;  optional CredentialList credentialList = 3;  optional ConfigData configData = 4;}message TipMessage {  // Types of TIP message PDUs  optional M0 m0 = 0;  // optional csid list to indicate capabilities  optional M1 m1 = 1;  // Introduction message with first key  optional M2 m2 = 2;  optional M3 m3 = 3;  optional M4 m4 = 4;}
