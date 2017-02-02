@@ -1,7 +1,3 @@
-<meta charset="utf-8" emacsmode="-*- markdown -*-">
-                
-                            **Starter Document**
-
 The Introduction Protocol (TIP)
 ===============================
 
