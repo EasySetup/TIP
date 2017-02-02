@@ -29,3 +29,8 @@ defined separately from the protocol to facilitate its use over any type of
 media. The protocol is primarily an authentication mechanism, but allows the
 inclusion of configuration information to support out-of-box setup.
 
+## next
+
+ 
+<!-- Markdeep: --><style class="fallback">body{visibility:hidden;white-space:pre;font-family:monospace}</style><script src="markdeep.min.js"></script><script src="https://casual-effects.com/markdeep/latest/markdeep.min.js"></script><script>window.alreadyProcessedMarkdeep||(document.body.style.visibility="visible")</script>
+
