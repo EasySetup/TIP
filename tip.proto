@@ -2,6 +2,8 @@
 //
 // Protocol syntax definition for The Introduction Protocol (TIP)
 
+syntax = "proto2"; 
+
 message M0 {                     // optional capability indication
   repeated string csid = 1;
 }
@@ -27,32 +29,21 @@ message M4 {
   required string wrappedData = 5; // when decrypted contains privateData
 }
 
-message Wpa2Credential {
-  required string ssid = 1;
-  required string wpa2Passphrase = 2;
-  optional string macAddress = 3;
-}
-
-message Wpa2PersonalList {
-  repeated Wpa2Credential wpa2Credential = 1;
-}
-
 message DeviceDescription { 
   // loosely based on UPnP - Basic:1.0 Device Definition Version 1.0
   // urn:schemas-upnp-org:device:Basic:1 
-  optional string friendlyName = 1  // short user-friendly title UTF-8
-                                    // default to disambiguate
-  optional string manufacturer = 2  // manufacturer name UTF-8 
-  optional string modelDescription = 3  // long user-friendly title
-  optional string modelName = 4     // model name
-  optional string modelNumber = 5   // model number
-  optional string serialNumber = 6  // manufacturer's serial number
+  optional string friendlyName = 1;     // short user-friendly title UTF-8
+  optional string manufacturer = 2;     // manufacturer name UTF-8 
+  optional string modelDescription = 3; // long user-friendly title
+  optional string modelName = 4;        // model name
+  optional string modelNumber = 5;      // model number
+  optional string serialNumber = 6;     // manufacturer's serial number
 }
 
 message NewKey {
   required string csid = 1;
-  required string keyData = 2;
-  required string proof = 7; // opaque octet string
+  required string keyData = 2;  // new key, opaque string formated per cipher suite
+  required string proof = 7;    // opaque octet string
 }
 
 message NewKeyList {
@@ -62,9 +53,9 @@ message NewKeyList {
 message Credential {
   enum CredentialType {
     UNKNOWN = 0;
-    CONNECTOR = 1; // from DPP
+    TAML = 1; 
     HOTSPOT2 = 2;
-    X.509 = 3;
+    X_509 = 3;
   }
   required CredentialType credentialType = 1;
   required string credentialOctets = 2;
@@ -74,13 +65,18 @@ message CredentialList {
   repeated Credential credential = 1;
 }
 
-message Wpa2Credential {
+message Wpa2PersonalSetup {
   required string ssid = 1;
-  required string wpaPassphrase = 2;
-  optional string macAddress =3;
+  required string wpa2Passphrase = 2;
+  optional string macAddress = 3;
 }
+
+message Wpa2PersonalSetupList {
+  repeated Wpa2PersonalSetup wpa2PersonalSetup = 1;
+}
+
 message ConfigData {
-  optional Wpa2Credential wpa2Credential = 1;
+  optional Wpa2PersonalSetupList wpa2PersonalSetupList = 1;
 }
 
 message privateData {
@@ -92,10 +88,10 @@ message privateData {
 
 message TipMessage {
   // Types of TIP message PDUs
-  optional M0 m0 = 0;  // optional csid list to indicate capabilities
-  optional M1 m1 = 1;  // Introduction message with first key
-  optional M2 m2 = 2;
-  optional M3 m3 = 3;
-  optional M4 m4 = 4;
+  optional M0 m0 = 1;  // optional csid list to indicate capabilities
+  optional M1 m1 = 2;  // Introduction message with first key
+  optional M2 m2 = 3;  // Protected message with pub key
+  optional M3 m3 = 4;
+  optional M4 m4 = 5;
 }
 
